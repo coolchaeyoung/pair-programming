@@ -42,7 +42,7 @@ const setState = newState => {
 };
 
 $startOrStop.addEventListener('click', () => {
-  const standard = new Date();
+  const standard = new Date().getTime() - state.time;
   let timerId;
   if (state.isStart) {
     setState({ ...state, isStart: false });
