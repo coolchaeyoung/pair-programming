@@ -21,10 +21,10 @@ const render = () => {
   $resetOrLap.toggleAttribute('disabled', !state.time);
   $resetOrLap.textContent = state.isStart ? 'Lap' : 'Reset';
 
-  const $fragment = document.createDocumentFragment();
-  // state.laps.forEach({lap, time} => {
-  //   $fragment.
-  // })
+  // const $fragment = document.createDocumentFragment();
+  $laps.innerHTML = state.laps
+    .map(({ lap, time }) => `<div>${lap}</div><div>${time}</div>`)
+    .join('');
 };
 
 const setState = newState => {
@@ -50,8 +50,8 @@ $startOrStop.addEventListener('click', () => {
 $resetOrLap.addEventListener('click', () => {
   if (state.isStart) {
     setState({
-      ...this.state,
-      laps: [...this.laps, { lap: state.laps.length + 1, time: state.time }]
+      ...state,
+      laps: [...state.laps, { lap: state.laps.length + 1, time: state.time }]
     });
   } else {
     setState({ time: 0, laps: [], isStart: false });
