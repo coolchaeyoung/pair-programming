@@ -1,14 +1,13 @@
 let state = {
   isLoading: true,
-  contentList: [],
   selected: 0
 };
 
 const $tabs = document.querySelector('.tabs');
 const $spinner = document.querySelector('.spinner');
 
-const render = () => {
-  const navTab = `<nav>${state.contentList
+const init = contentList => {
+  const navTab = `<nav>${contentList
     .map(
       ({ title }, index) =>
         `<div class="tab" data-index="${index}">${title}</div>`
@@ -17,7 +16,7 @@ const render = () => {
     <span class="glider"></span>
   </nav>`;
 
-  const tabContents = state.contentList
+  const tabContents = contentList
     .map(
       ({ content }, index) =>
         `<div class="tab-content ${
@@ -25,11 +24,21 @@ const render = () => {
         }">${content}</div>`
     )
     .join('');
-
-  $tabs.style.setProperty('--tabs-length', state.contentList.length);
+  $tabs.style.setProperty('--tabs-length', contentList.length);
   $tabs.innerHTML = navTab + tabContents;
+};
 
+const render = () => {
+  const $glider = document.querySelector('.glider');
   $spinner.style.display = state.isLoading ? 'block' : 'none';
+
+  const gliderWidth = +window
+    .getComputedStyle($tabs)
+    .getPropertyValue('--tab-width')
+    .trim();
+
+  $glider.style.left = gliderWidth * +state.selected + 'px';
+  // console.log(gliderWidth, state.selected);
 };
 
 const setState = newState => {
@@ -62,9 +71,10 @@ const fetchTabsData = () =>
 // Do something!
 
 window.addEventListener('DOMContentLoaded', () => {
-  fetchTabsData().then(data =>
-    setState({ ...state, isLoading: false, contentList: data })
-  );
+  fetchTabsData().then(data => {
+    init(data);
+    setState({ ...state, isLoading: false });
+  });
 });
 
 $tabs.addEventListener('click', e => {
