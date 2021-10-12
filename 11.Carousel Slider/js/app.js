@@ -1,6 +1,7 @@
 const carousel = ($container, images) => {
   let state = {
-    currentSlide: 0
+    currentSlide: 1,
+    duration: 0
   };
 
   const $fragment = document.createDocumentFragment();
@@ -35,6 +36,7 @@ const carousel = ($container, images) => {
   $container.style.opacity = 1;
 
   const render = () => {
+    $carouselSlides.style.setProperty('--duration', state.duration);
     $carouselSlides.style.setProperty('--currentSlide', state.currentSlide);
   };
 
@@ -43,13 +45,38 @@ const carousel = ($container, images) => {
     render();
   };
 
+  const prevMove = () => {
+    if (state.currentSlide >= 0) {
+      setState({
+        currentSlide: state.currentSlide - 1,
+        duration: 200
+      });
+    }
+    if (state.currentSlide === 0) {
+      setTimeout(() => {
+        setState({ currentSlide: images.length, duration: 0 });
+      }, state.duration);
+    }
+  };
+
+  const nextMove = () => {
+    if (state.currentSlide <= images.length + 1) {
+      setState({ currentSlide: state.currentSlide + 1, duration: 200 });
+    }
+    if (state.currentSlide === images.length + 1) {
+      setTimeout(() => {
+        setState({ currentSlide: 1, duration: 0 });
+      }, state.duration);
+    }
+  };
+
   $container.addEventListener('click', e => {
     const $button = e.target.closest('button');
     if (!$button) return;
-    $button.classList.contains('prev')
-      ? setState({ ...state, currentSlide: state.currentSlide - 1 })
-      : setState({ ...state, currentSlide: state.currentSlide + 1 });
+    $button.classList.contains('prev') ? prevMove() : nextMove();
   });
+
+  render();
 };
 
 carousel(document.querySelector('.carousel'), [
