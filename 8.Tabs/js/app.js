@@ -21,12 +21,14 @@ const render = () => {
     .map(
       ({ content }, index) =>
         `<div class="tab-content ${
-          state.selected === index ? 'active' : ''
+          +state.selected === index ? 'active' : ''
         }">${content}</div>`
     )
     .join('');
+
   $tabs.style.setProperty('--tabs-length', state.contentList.length);
   $tabs.innerHTML = navTab + tabContents;
+
   $spinner.style.display = state.isLoading ? 'block' : 'none';
 };
 
@@ -63,4 +65,10 @@ window.addEventListener('DOMContentLoaded', () => {
   fetchTabsData().then(data =>
     setState({ ...state, isLoading: false, contentList: data })
   );
+});
+
+$tabs.addEventListener('click', e => {
+  if (!e.target.matches('.tab')) return;
+
+  setState({ ...state, selected: e.target.dataset.index });
 });
