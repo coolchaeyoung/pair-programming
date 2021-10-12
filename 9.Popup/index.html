@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Popup</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::after,
+      *::before {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Open Sans';
+        font-weight: 300;
+      }
+      .title {
+        color: #db5b33;
+        font-weight: 300;
+        text-align: center;
+      }
+      /* 팝업을 위한 CSS */
+    </style>
+  </head>
+  <body>
+    <h1 class="title">Popup</h1>
+
+    <!-- 팝업을 위한 HTML -->
+    <button class="toggle-popup">toggle popup</button>
+    <p class="popup-message"></p>
+    <div class="modal-container">
+      <div
+        role="dialog"
+        class="modal"
+        aria-labelledby="modal-label"
+        aria-describedby="modal-desc"
+        aria-modal="true"
+      >
+        <h2 id="modal-label" class="modal-heading">모달 제목</h2>
+        <p id="modal-desc" class="modal-content">
+          모달 내용 모달 내용 모달 내용 모달 내용 모달 내용 모달 내용 모달 내용
+          모달 내용 모달 내용 모달 내용 모달 내용 모달 내용
+        </p>
+        <div class="button-group">
+          <button type="button" class="button cancel-button">취소</button>
+          <button type="button" class="button confirm-button">확인</button>
+        </div>
+        <button type="button" class="close-button" aria-label="모달 닫기">
+          <span class="ir"></span>
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
