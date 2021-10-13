@@ -60,12 +60,14 @@ const render = () => {
 
   const createRenderButton = ({ year, month, day }) => {
     let string =
-      getDay(year, month, day) === 0 && month === state.month
-        ? 'class="red"'
+      getDay(year, month, day) === 0 && month === state.month ? 'red ' : '';
+    string += month === state.month ? 'black ' : '';
+    string +=
+      new Date(year, month, day).toDateString() === new Date().toDateString()
+        ? 'today'
         : '';
-    string += month === state.month ? 'class="black"' : '';
 
-    return `<button ${string} data-year="${year}" data-month="${month}">${day}</button>`;
+    return `<button class="${string.trim()}" data-year="${year}" data-month="${month}">${day}</button>`;
   };
 
   const prevDays =
