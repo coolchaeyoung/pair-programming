@@ -149,7 +149,8 @@ $calendarNav.addEventListener('click', e => {
 $calendarGrid.addEventListener('click', e => {
   if (!e.target.matches('button')) return;
 
-  const { year, month } = e.target.dataset;
+  const { year, month: strMonth } = e.target.dataset;
+  const month = +strMonth + 1 + '';
   const day = e.target.textContent;
   const pickDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
   console.log(pickDate);
