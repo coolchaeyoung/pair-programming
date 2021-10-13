@@ -1,27 +1,27 @@
-// state
-let isToggle = false;
+let state = { isToggle: false, isInit: false };
 
 const $nav = document.querySelector('nav');
+const $main = document.querySelector('main');
 const $toggle = document.querySelector('.toggle');
 
 const render = () => {
-  $nav.classList.toggle('active', isToggle);
+  $nav.classList.toggle('active', state.isToggle);
+  [$nav, $main, $toggle].forEach($el =>
+    $el.classList.toggle('notransition', state.isInit)
+  );
 };
 
-const setIsToggle = newIsToggle => {
-  isToggle = newIsToggle;
-  // 로컬스토리지에 isToggle 저장.
-  localStorage.setItem('isToggle', isToggle);
+const setState = newState => {
+  state = newState;
+  sessionStorage.setItem('isToggle', state.isToggle);
   render();
 };
 
 $toggle.addEventListener('click', () => {
-  setIsToggle(!isToggle);
+  setState({ isToggle: !state.isToggle, isInit: false });
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-  const localStorageValue =
-    JSON.parse(localStorage.getItem('isToggle')) || false;
-  console.log(typeof localStorageValue, localStorageValue);
-  setIsToggle(localStorageValue);
+  const isToggle = JSON.parse(sessionStorage.getItem('isToggle')) || false;
+  setState({ isToggle, isInit: true });
 });
