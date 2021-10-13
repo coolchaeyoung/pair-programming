@@ -43,7 +43,7 @@ const render = () => {
     const $pwError = $signinPassword.parentNode.querySelector('.error');
     $pwError.textContent = state.isValidPassword
       ? ''
-      : '영문 또는 숫자 12자를 입력하세요';
+      : '영문 또는 숫자 6~12자를 입력하세요';
   }
 
   $signinButton.disabled = !(state.isValidId && state.isValidPassword);
@@ -71,7 +71,7 @@ const render = () => {
     const $NameError = $signupName.parentNode.querySelector('.error');
     $NameError.textContent = state.isValidSignupName
       ? ''
-      : '이메일 형식에 맞게 입력하세요.';
+      : '이름을 입력하세요.';
   }
 
   // pw
@@ -83,7 +83,7 @@ const render = () => {
     const $pwError = $signupPassword.parentNode.querySelector('.error');
     $pwError.textContent = state.isValidSignupPw
       ? ''
-      : '영문 또는 숫자 12자를 입력하세요';
+      : '영문 또는 숫자 6~12자를 입력하세요';
   }
 
   // pw confirm
@@ -104,6 +104,13 @@ const render = () => {
       ? ''
       : '패스워드가 일치하지 않습니다.';
   }
+
+  $signupButton.disabled = !(
+    state.isValidSignupId &&
+    state.isValidSignupName &&
+    state.isValidSignupPw &&
+    state.isValidSignupConfirm
+  );
 };
 
 const setState = newState => {
@@ -115,15 +122,15 @@ const idValidation = inputValue => {
   const idRegex =
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
   idRegex.test(inputValue)
-    ? setState({ ...state, isValidId: true })
-    : setState({ ...state, isValidId: false });
+    ? setState({ ...state, isValidId: true, isValidSignupId: true })
+    : setState({ ...state, isValidId: false, isValidSignupId: false });
 };
 
 const pwValidation = inputValue => {
   const pwRegex = /^[A-Za-z0-9+]{6,12}$/gi;
   pwRegex.test(inputValue)
-    ? setState({ ...state, isValidPassword: true })
-    : setState({ ...state, isValidPassword: false });
+    ? setState({ ...state, isValidPassword: true, isValidSignupPw: true })
+    : setState({ ...state, isValidPassword: false, isValidSignupPw: false });
 };
 
 const nameValidation = inputValue => {
@@ -215,5 +222,7 @@ $signupConfirmPassword.addEventListener(
 $signupButton.addEventListener('click', e => {
   e.preventDefault();
   console.log(`id : ${$signupUserId.value}`);
+  console.log(`name : ${$signupName.value}`);
   console.log(`pw : ${$signupPassword.value}`);
+  console.log(`pwconfirm : ${$signupConfirmPassword.value}`);
 });
