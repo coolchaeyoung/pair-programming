@@ -30,6 +30,9 @@
       }
 
       /* 뷰를 구현하세요. */
+      .hidden {
+        display: none;
+      }
       button {
         border: 0;
         background-color: white;
@@ -106,7 +109,16 @@
   </head>
   <body>
     <h1 class="title">Calendar</h1>
-    <div class="calendar">
+
+    <input
+      type="text"
+      class="datePicker"
+      value=""
+      placeholder="Select date"
+      readonly
+    />
+
+    <div class="calendar hidden">
       <!-- 뷰를 구현하세요 -->
       <div class="calendar-nav">
         <button class="prev"><i class="bx bx-left-arrow"></i></button>

@@ -18,9 +18,13 @@ const DAY = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 let state = {
   year: 0,
   month: 0,
-  day: 0
+  day: 0,
+  isShow: false
 };
 
+const $body = document.querySelector('body');
+const $datePicker = document.querySelector('.datePicker');
+const $calendar = document.querySelector('.calendar');
 const $calendarNav = document.querySelector('.calendar-nav');
 const $currentMonth = document.querySelector('.currentMonth');
 const $currentYear = document.querySelector('.currentYear');
@@ -63,6 +67,11 @@ const render = () => {
       getDay(year, month, day) === 0 && month === state.month ? 'red ' : '';
     string += month === state.month ? 'black ' : '';
     string +=
+      new Date(year, month, day).toDateString() ===
+      new Date(state.year, state.month, state.day).toDateString()
+        ? 'today'
+        : '';
+    string +=
       new Date(year, month, day).toDateString() === new Date().toDateString()
         ? 'today'
         : '';
@@ -88,6 +97,8 @@ const render = () => {
     .join('');
 
   $calendarGrid.innerHTML = renderWeek + prevDays + currentDays + nextDays;
+
+  $calendar.classList.toggle('hidden', !state.isShow);
 };
 
 const setState = newState => {
@@ -95,12 +106,27 @@ const setState = newState => {
   render();
 };
 
-window.addEventListener('DOMContentLoaded', () => {
-  const date = new Date();
+// window.addEventListener('DOMContentLoaded', () => {
+//   const date = new Date();
+//   setState({
+//     ...state,
+// year: date.getFullYear(),
+// month: date.getMonth(),
+// day: date.getDate()
+//   });
+// });
+$body.addEventListener('click', e => {
+  if (!e.target.matches('.datePicker') && !e.target.closest('.calendar'))
+    setState({ ...state, isShow: false });
+});
+
+$datePicker.addEventListener('click', e => {
+  const date = e.target.value === '' ? new Date() : new Date(e.target.value);
   setState({
     year: date.getFullYear(),
     month: date.getMonth(),
-    day: date.getDate()
+    day: date.getDate(),
+    isShow: true
   });
 });
 
@@ -118,4 +144,16 @@ $calendarNav.addEventListener('click', e => {
       ? setState({ ...state, year: state.year + 1, month: 0 })
       : setState({ ...state, month: state.month + 1 });
   }
+});
+
+$calendarGrid.addEventListener('click', e => {
+  if (!e.target.matches('button')) return;
+
+  const { year, month } = e.target.dataset;
+  const day = e.target.textContent;
+  const pickDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+  console.log(pickDate);
+
+  $datePicker.value = pickDate;
+  setState({ year: +year, month: +month, day: +day, isShow: false });
 });
