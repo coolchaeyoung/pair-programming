@@ -14,25 +14,17 @@ const render = () => {
   $second.style.setProperty('--deg', 6 * state.second);
 };
 
-const setState = newState => {
-  state = newState;
+const setState = () => {
+  const date = new Date();
+  state = {
+    hour: date.getHours(),
+    minute: date.getMinutes(),
+    second: date.getSeconds()
+  };
   render();
 };
 
 window.addEventListener('DOMContentLoaded', () => {
-  const date = new Date();
-  setState({
-    hour: date.getHours(),
-    minute: date.getMinutes(),
-    second: date.getSeconds()
-  });
+  setState();
+  setInterval(setState, 1000);
 });
-
-setInterval(() => {
-  const date = new Date();
-  setState({
-    hour: date.getHours(),
-    minute: date.getMinutes(),
-    second: date.getSeconds()
-  });
-}, 1000);
