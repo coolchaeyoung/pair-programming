@@ -30,15 +30,73 @@
       }
 
       /* 뷰를 구현하세요. */
+      button {
+        border: 0;
+        background-color: white;
+      }
+
       .calendar {
         --width: 100px;
+        box-shadow: 1px 0 10px 0 gray;
+        border-radius: 10px;
+        text-align: center;
+        width: 350px;
+        /* background-color: gray; */
       }
       .calendar-nav {
+        border-radius: 10px 10px 0 0;
         display: flex;
-        width: var(--width);
+        color: white;
+        background-color: #7dd87d;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+      }
+      .calendar-nav > button {
+        background-color: #7dd87d;
+        padding: 10px;
+        cursor: pointer;
+      }
+      .prev: {
+        order: 0;
+      }
+      .next {
+        order: 2;
+      }
+      .currentDate {
+        order: 1;
+      }
+      .currentMonth {
+        font-size: 18px;
+      }
+      .currentYear {
+        display: block;
+        font-size: 14px;
       }
       .calendar-grid {
+        border-radius: 0 0 10px 10px;
+        background-color: white;
         display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        grid-template-rows: auto;
+        gap: 10px;
+        padding: 10px;
+        color: gray;
+      }
+      .calendar-grid > button {
+        padding: 10px 0;
+        color: gray;
+      }
+      .calendar-grid > button:hover {
+        border-radius: 50%;
+        background-color: green;
+        color: white;
+      }
+      .calendar-grid > button.black {
+        color: black;
+      }
+      .calendar-grid > button.red {
+        color: red;
       }
     </style>
   </head>
@@ -46,8 +104,34 @@
     <h1 class="title">Calendar</h1>
     <div class="calendar">
       <!-- 뷰를 구현하세요 -->
-      <div class="calendar-nav">test</div>
-      <div class="calendar-grid"></div>
+      <div class="calendar-nav">
+        <button class="prev"><i class="bx bx-left-arrow"></i></button>
+        <button class="next"><i class="bx bx-right-arrow"></i></button>
+        <div class="currentDate">
+          <span class="currentMonth">January</span>
+          <span class="currentYear">2021</span>
+        </div>
+      </div>
+      <div class="calendar-grid">
+        <!-- <div>SUN</div>
+        <div>MON</div>
+        <div>TUE</div>
+        <div>WED</div>
+        <div>THU</div>
+        <div>FRI</div>
+        <div>SAT</div>
+        <button>1</button><button>2</button><button>3</button><button>4</button
+        ><button>5</button><button>6</button><button>7</button><button>8</button
+        ><button>9</button><button>10</button><button>11</button
+        ><button>12</button><button>13</button><button>14</button
+        ><button>15</button><button>16</button><button>17</button
+        ><button>18</button><button>19</button><button>20</button
+        ><button>21</button><button>22</button><button>23</button
+        ><button>24</button><button>25</button><button>26</button
+        ><button>27</button><button>28</button><button>29</button
+        ><button>30</button><button>31</button> -->
+      </div>
     </div>
+    <script src="js/app.js"></script>
   </body>
 </html>
