@@ -1,48 +1,49 @@
-let state = {
-  isLoading: true,
-  selected: 0
-};
+let currentTabIndex = 0;
 
 const $tabs = document.querySelector('.tabs');
 const $spinner = document.querySelector('.spinner');
 
-const init = contentList => {
-  const navTab = `<nav>${contentList
-    .map(
-      ({ title }, index) =>
-        `<div class="tab" data-index="${index}">${title}</div>`
-    )
-    .join('')}
-    <span class="glider"></span>
-  </nav>`;
+const initRender = contents => {
+  const navTab = `
+    <nav>${contents
+      .map(
+        ({ title }, i) => `<div class="tab" data-index="${i}">${title}</div>`
+      )
+      .join('')}
+      <span class="glider"></span>
+    </nav>`;
 
-  const tabContents = contentList
+  const tabContents = contents
     .map(
-      ({ content }, index) =>
+      ({ content }, i) =>
         `<div class="tab-content ${
-          +state.selected === index ? 'active' : ''
+          +currentTabIndex === i ? 'active' : ''
         }">${content}</div>`
     )
     .join('');
-  $tabs.style.setProperty('--tabs-length', contentList.length);
+
+  $tabs.style.setProperty('--tabs-length', contents.length);
   $tabs.innerHTML = navTab + tabContents;
+
+  $spinner.style.display = 'none';
 };
 
 const render = () => {
   const $glider = document.querySelector('.glider');
-  $spinner.style.display = state.isLoading ? 'block' : 'none';
 
   const gliderWidth = +window
     .getComputedStyle($tabs)
-    .getPropertyValue('--tab-width')
-    .trim();
+    .getPropertyValue('--tab-width');
 
-  $glider.style.left = gliderWidth * +state.selected + 'px';
-  // console.log(gliderWidth, state.selected);
+  $glider.style.left = gliderWidth * currentTabIndex + 'px';
+
+  [...document.querySelectorAll('.tab-content')].forEach(($tabContent, i) => {
+    $tabContent.classList.toggle('active', i === currentTabIndex);
+  });
 };
 
-const setState = newState => {
-  state = newState;
+const setCurrentTabIndex = newCurrentTabIndex => {
+  currentTabIndex = +newCurrentTabIndex;
   render();
 };
 
@@ -68,17 +69,14 @@ const fetchTabsData = () =>
     );
   });
 
-// Do something!
-
 window.addEventListener('DOMContentLoaded', () => {
   fetchTabsData().then(data => {
-    init(data);
-    setState({ ...state, isLoading: false });
+    initRender(data);
   });
 });
 
 $tabs.addEventListener('click', e => {
   if (!e.target.matches('.tab')) return;
 
-  setState({ ...state, selected: e.target.dataset.index });
+  setCurrentTabIndex(e.target.dataset.index);
 });
