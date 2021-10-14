@@ -6,6 +6,7 @@ let state = {
 const $togglePopup = document.querySelector('.toggle-popup');
 const $popupMessage = document.querySelector('.popup-message');
 const $modalContainer = document.querySelector('.modal-container');
+const $form = document.querySelector('.form');
 const $modalInput = document.querySelector('.modal-input');
 
 const render = () => {
@@ -31,23 +32,21 @@ const addText = newText => {
 
 $togglePopup.addEventListener('click', () => {
   setState({ ...state, isPopup: true });
+  $modalInput.focus();
 });
 
 $modalContainer.addEventListener('click', e => {
-  if (e.target.classList.contains('confirm-button')) {
-    const content = $modalInput.value.trim();
-    if (content) addText(content);
-    $modalInput.value = '';
-  }
-  if (e.target.closest('.button') || !e.target.closest('.modal')) {
+  if (e.target.closest('.close') || !e.target.closest('.modal')) {
     setState({ ...state, isPopup: false });
+    $modalInput.value = '';
   }
 });
 
-$modalInput.addEventListener('keyup', e => {
-  if (e.key === 'Enter') {
-    const content = $modalInput.value.trim();
-    if (content) addText(content);
-    $modalInput.value = '';
-  }
+$form.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const content = $modalInput.value.trim();
+  if (content) addText(content);
+
+  $modalInput.value = '';
 });

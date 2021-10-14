@@ -29,6 +29,9 @@
         text-align: center;
       }
       /* 팝업을 위한 CSS */
+      button:hover {
+        cursor: pointer;
+      }
       .modal-container {
         position: fixed;
         top: 0;
@@ -90,14 +93,18 @@
           consectetur, ipsam consequuntur quibusdam sed voluptatibus ex deserunt
           Velit quam laboriosam voluptate.
         </p>
-        <div class="button-group">
+
+        <form class="form">
           <input type="text" class="modal-input" />
-          <button type="button" class="button confirm-button">OK</button>
-          <button type="button" class="button cancel-button">Cancel</button>
-        </div>
+          <button type="submit" class="button confirm-button">OK</button>
+          <button type="button" class="button cancel-button close">
+            Cancel
+          </button>
+        </form>
+
         <button
           type="button"
-          class="button close-button"
+          class="button close-button close"
           aria-label="모달 닫기"
         >
           X
