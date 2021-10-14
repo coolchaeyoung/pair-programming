@@ -10,17 +10,23 @@ const $modalInput = document.querySelector('.modal-input');
 
 const render = () => {
   $popupMessage.innerHTML = state.textList
-    .map(text => `<div>${text}</div>`)
+    .map(text => `<div>from popup: ${text}</div>`)
     .join('');
+
   $modalContainer.classList.toggle('active', state.isPopup);
 };
+
 const setState = newState => {
   state = newState;
   render();
 };
 
 const addText = newText => {
-  setState({ ...state, textList: [newText, ...state.textList] });
+  setState({
+    ...state,
+    textList: [newText, ...state.textList],
+    isPopup: false
+  });
 };
 
 $togglePopup.addEventListener('click', () => {
