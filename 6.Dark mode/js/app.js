@@ -13,6 +13,14 @@ const setTheme = newTheme => {
   render();
 };
 
+window.addEventListener('DOMContentLoaded', () => {
+  const darkThemeMatches = window.matchMedia(
+    '(prefers-color-scheme: dark)'
+  ).matches;
+
+  setTheme(JSON.parse(localStorage.getItem('isDarkTheme')) ?? darkThemeMatches);
+});
+
 $toggleButton.addEventListener('click', () => {
   setTheme(!isDarkTheme);
 });
