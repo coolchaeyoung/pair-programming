@@ -3,8 +3,8 @@ let currentTabIndex = 0;
 const $tabs = document.querySelector('.tabs');
 const $spinner = document.querySelector('.spinner');
 
-const initRender = contents => {
-  const navTab = `
+const renderInit = contents => {
+  const navTabs = `
     <nav>${contents
       .map(
         ({ title }, i) => `<div class="tab" data-index="${i}">${title}</div>`
@@ -17,33 +17,32 @@ const initRender = contents => {
     .map(
       ({ content }, i) =>
         `<div class="tab-content ${
-          +currentTabIndex === i ? 'active' : ''
+          currentTabIndex === i ? 'active' : ''
         }">${content}</div>`
     )
     .join('');
 
   $tabs.style.setProperty('--tabs-length', contents.length);
-  $tabs.innerHTML = navTab + tabContents;
+  $tabs.innerHTML = navTabs + tabContents;
 
   $spinner.style.display = 'none';
 };
 
 const render = () => {
-  const $glider = document.querySelector('.glider');
-
-  const gliderWidth = +window
+  const navTabWidth = +window
     .getComputedStyle($tabs)
     .getPropertyValue('--tab-width');
 
-  $glider.style.left = gliderWidth * currentTabIndex + 'px';
+  const $glider = document.querySelector('.glider');
+  $glider.style.left = navTabWidth * currentTabIndex + 'px';
 
-  [...document.querySelectorAll('.tab-content')].forEach(($tabContent, i) => {
-    $tabContent.classList.toggle('active', i === currentTabIndex);
-  });
+  [...document.querySelectorAll('.tab-content')].forEach(($tabContent, i) =>
+    $tabContent.classList.toggle('active', i === currentTabIndex)
+  );
 };
 
 const setCurrentTabIndex = newCurrentTabIndex => {
-  currentTabIndex = +newCurrentTabIndex;
+  currentTabIndex = newCurrentTabIndex;
   render();
 };
 
@@ -71,12 +70,12 @@ const fetchTabsData = () =>
 
 window.addEventListener('DOMContentLoaded', () => {
   fetchTabsData().then(data => {
-    initRender(data);
+    renderInit(data);
   });
 });
 
 $tabs.addEventListener('click', e => {
   if (!e.target.matches('.tab')) return;
 
-  setCurrentTabIndex(e.target.dataset.index);
+  setCurrentTabIndex(+e.target.dataset.index);
 });
