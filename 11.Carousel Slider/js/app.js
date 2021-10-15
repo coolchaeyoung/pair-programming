@@ -1,12 +1,14 @@
 const carousel = ($container, images) => {
+  const DURATION = 600;
+  let isTransitionEnd = true;
+
   let state = {
     currentSlide: 1,
-    duration: 0
+    duration: DURATION
   };
 
   const $carouselSlides = document.createElement('div');
   $carouselSlides.classList.add('carousel-slides');
-  $carouselSlides.style.setProperty('--duration', 300);
   $carouselSlides.innerHTML = [
     images[images.length - 1],
     ...images,
@@ -43,29 +45,10 @@ const carousel = ($container, images) => {
     render();
   };
 
-  const prevMove = () => {
-    if (state.currentSlide >= 0) {
-      setState({
-        currentSlide: state.currentSlide - 1,
-        duration: 200
-      });
-    }
-    if (state.currentSlide === 0) {
-      setTimeout(() => {
-        setState({ currentSlide: images.length, duration: 0 });
-      }, state.duration);
-    }
-  };
-
-  const nextMove = () => {
-    if (state.currentSlide <= images.length + 1) {
-      setState({ currentSlide: state.currentSlide + 1, duration: 200 });
-    }
-    if (state.currentSlide === images.length + 1) {
-      setTimeout(() => {
-        setState({ currentSlide: 1, duration: 0 });
-      }, state.duration);
-    }
+  const move = num => {
+    if (!isTransitionEnd) return;
+    isTransitionEnd = false;
+    setState({ currentSlide: state.currentSlide + num, duration: DURATION });
   };
 
   window.addEventListener('load', () => {
@@ -76,7 +59,20 @@ const carousel = ($container, images) => {
   $container.addEventListener('click', e => {
     const $button = e.target.closest('button');
     if (!$button) return;
-    $button.classList.contains('prev') ? prevMove() : nextMove();
+    $button.classList.contains('prev') ? move(-1) : move(1);
+  });
+
+  $carouselSlides.addEventListener('transitionend', () => {
+    const nextSlide =
+      state.currentSlide === 0
+        ? images.length
+        : state.currentSlide === images.length + 1
+        ? 1
+        : state.currentSlide;
+
+    setState({ currentSlide: nextSlide, duration: 0 });
+
+    isTransitionEnd = true;
   });
 
   render();
