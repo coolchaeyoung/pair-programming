@@ -1,12 +1,9 @@
 const carousel = ($container, images) => {
-  const DURATION = 600;
-  let isTransitionEnd = true;
+  const DURATION = 300;
+  let isTransitionWorking = false;
+  let currentSlide = 1;
 
-  let state = {
-    currentSlide: 1,
-    duration: DURATION
-  };
-
+  // Create DOM
   const $carouselSlides = document.createElement('div');
   $carouselSlides.classList.add('carousel-slides');
   $carouselSlides.innerHTML = [
@@ -35,44 +32,49 @@ const carousel = ($container, images) => {
 
   $container.appendChild($fragment);
 
+  // state function
   const render = () => {
-    $carouselSlides.style.setProperty('--duration', state.duration);
-    $carouselSlides.style.setProperty('--currentSlide', state.currentSlide);
+    $carouselSlides.style.setProperty('--currentSlide', currentSlide);
   };
 
-  const setState = newState => {
-    state = newState;
+  const setCurrentSlide = newCurrentSlide => {
+    currentSlide = newCurrentSlide;
     render();
   };
 
   const move = num => {
-    if (!isTransitionEnd) return;
-    isTransitionEnd = false;
-    setState({ currentSlide: state.currentSlide + num, duration: DURATION });
+    if (isTransitionWorking) return;
+
+    isTransitionWorking = true;
+    $carouselSlides.style.setProperty('--duration', DURATION);
+    setCurrentSlide(currentSlide + num);
   };
 
+  // Event bindings
   window.addEventListener('load', () => {
-    $container.style.width = document.querySelector('img').clientWidth + 'px';
+    $container.style.width = `${document.querySelector('img').clientWidth}px`;
     $container.style.opacity = 1;
   });
 
   $container.addEventListener('click', e => {
     const $button = e.target.closest('button');
     if (!$button) return;
+
     $button.classList.contains('prev') ? move(-1) : move(1);
   });
 
   $carouselSlides.addEventListener('transitionend', () => {
-    const nextSlide =
-      state.currentSlide === 0
+    const newCurrentSlide =
+      currentSlide === 0
         ? images.length
-        : state.currentSlide === images.length + 1
+        : currentSlide === images.length + 1
         ? 1
-        : state.currentSlide;
+        : currentSlide;
 
-    setState({ currentSlide: nextSlide, duration: 0 });
+    $carouselSlides.style.setProperty('--duration', 0);
+    setCurrentSlide(newCurrentSlide);
 
-    isTransitionEnd = true;
+    isTransitionWorking = false;
   });
 
   render();
