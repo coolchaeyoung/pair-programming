@@ -1,5 +1,5 @@
 let state = {
-  time: 0,
+  displayTime: 0,
   laps: [],
   isRunning: false
 };
@@ -18,11 +18,11 @@ const timeToString = time => {
 };
 
 const render = () => {
-  $display.textContent = timeToString(state.time);
+  $display.textContent = timeToString(state.displayTime);
 
   $startOrStop.textContent = state.isRunning ? 'Stop' : 'Start';
 
-  $resetOrLap.toggleAttribute('disabled', !state.time);
+  $resetOrLap.toggleAttribute('disabled', !state.displayTime);
   $resetOrLap.textContent = state.isRunning ? 'Lap' : 'Reset';
 
   $laps.innerHTML = `
@@ -41,20 +41,28 @@ const setState = newState => {
   render();
 };
 
+const stop = () => {
+  setState({ ...state, isRunning: false });
+};
+
 const start = () => {
   setState({ ...state, isRunning: true });
-  const standardTime = new Date().getTime() - state.time;
+  const standardTime = new Date().getTime() - state.displayTime;
 
   const timerId = setInterval(() => {
     if (!state.isRunning) clearInterval(timerId);
 
-    const time = new Date() - standardTime;
-    setState({ ...state, time });
+    const displayTime = new Date() - standardTime;
+    setState({ ...state, displayTime });
   }, 10);
 };
 
-const stop = () => {
-  setState({ ...state, isRunning: false });
+const addLap = newLap => {
+  setState({ ...state, laps: [...state.laps, newLap] });
+};
+
+const reset = () => {
+  setState({ displayTime: 0, laps: [], isRunning: false });
 };
 
 $startOrStop.addEventListener('click', () => {
@@ -62,11 +70,7 @@ $startOrStop.addEventListener('click', () => {
 });
 
 $resetOrLap.addEventListener('click', () => {
-  const laps = state.isRunning
-    ? [...state.laps, { lap: state.laps.length + 1, time: state.time }]
-    : [];
-
   state.isRunning
-    ? setState({ ...state, laps })
-    : setState({ time: 0, laps, isRunning: false });
+    ? addLap({ lap: state.laps.length + 1, time: state.displayTime })
+    : reset();
 });
