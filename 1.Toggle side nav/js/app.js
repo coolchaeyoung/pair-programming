@@ -1,28 +1,31 @@
-// FIXME: isToggle -> isExpanded
-let state = { isToggle: false, isInit: false };
+let state = { isNavigationOpened: false, isInitRender: false };
 
 const $nav = document.querySelector('nav');
 const $main = document.querySelector('main');
 const $toggle = document.querySelector('.toggle');
 
 const render = () => {
-  $nav.classList.toggle('active', state.isToggle);
+  $nav.classList.toggle('active', state.isNavigationOpened);
   [$nav, $main, $toggle].forEach($el =>
-    $el.classList.toggle('notransition', state.isInit)
+    $el.classList.toggle('notransition', state.isInitRender)
   );
 };
 
 const setState = newState => {
   state = newState;
-  sessionStorage.setItem('isToggle', state.isToggle);
+  sessionStorage.setItem('isNavigationOpened', state.isNavigationOpened);
   render();
 };
 
 $toggle.addEventListener('click', () => {
-  setState({ isToggle: !state.isToggle, isInit: false });
+  setState({
+    isNavigationOpened: !state.isNavigationOpened,
+    isInitRender: false
+  });
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-  const isToggle = JSON.parse(sessionStorage.getItem('isToggle')) || false;
-  setState({ isToggle, isInit: true });
+  const isNavigationOpened =
+    JSON.parse(sessionStorage.getItem('isNavigationOpened')) || false;
+  setState({ isNavigationOpened, isInitRender: true });
 });
