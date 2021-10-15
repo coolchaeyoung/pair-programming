@@ -1,13 +1,13 @@
-let scrollPosition = 0;
+let currentScrollY = 0;
 
 const $scrollIcon = document.querySelector('.scroll-icon');
 
 const render = () => {
-  $scrollIcon.style.display = scrollPosition >= 100 ? 'block' : 'none';
+  $scrollIcon.style.display = currentScrollY >= 100 ? 'block' : 'none';
 };
 
-const setScrollPosition = newScrollPosition => {
-  scrollPosition = newScrollPosition;
+const setCurrentScrollY = newCurrentScrollY => {
+  currentScrollY = newCurrentScrollY;
   render();
 };
 
@@ -29,10 +29,11 @@ const throttle = (callback, delay) => {
 window.addEventListener(
   'scroll',
   throttle(() => {
-    setScrollPosition(window.pageYOffset);
+    setCurrentScrollY(window.pageYOffset);
   }, 100)
 );
+
 $scrollIcon.addEventListener('click', () => {
-  setScrollPosition(0);
+  setCurrentScrollY(0);
   window.scroll({ top: 0, behavior: 'smooth' });
 });
