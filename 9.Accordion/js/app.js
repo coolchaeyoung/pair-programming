@@ -1,4 +1,4 @@
-let select = '';
+let selectedMenuText = '';
 
 const $accordion = document.querySelector('.accordion');
 const $menuContainers = document.querySelectorAll('.menu-container');
@@ -7,23 +7,28 @@ const render = () => {
   [...$menuContainers].forEach($menuContainer => {
     const menuText = $menuContainer.querySelector('.menu').textContent.trim();
 
-    $menuContainer.classList.toggle('active', select === menuText);
+    $menuContainer.classList.toggle('active', selectedMenuText === menuText);
 
     const $submenu = $menuContainer.querySelector('.submenu');
     $submenu.style.height =
-      menuText === select ? $submenu.scrollHeight + 'px' : 0;
+      selectedMenuText === menuText ? `${$submenu.scrollHeight}px` : 0;
   });
 };
 
-const setSelect = newSelect => {
-  select = newSelect;
+const setSelectedMenuText = newSelectedMenuText => {
+  selectedMenuText = newSelectedMenuText;
   render();
 };
+
+window.addEventListener('DOMContentLoaded', () => {
+  const $submenu = $menuContainers[0].querySelector('.submenu');
+  $submenu.style.height = 'auto';
+  $submenu.style.height = getComputedStyle($submenu).height;
+});
 
 $accordion.addEventListener('click', e => {
   const $menu = e.target.closest('.menu');
   if (!$menu) return;
 
-  const newSelect = $menu.textContent.trim();
-  setSelect(newSelect);
+  setSelectedMenuText($menu.textContent.trim());
 });
