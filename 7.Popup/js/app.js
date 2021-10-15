@@ -1,5 +1,5 @@
 let state = {
-  isPopup: false,
+  isPopupOpened: false,
   textList: []
 };
 
@@ -14,7 +14,7 @@ const render = () => {
     .map(text => `<div>from popup: ${text}</div>`)
     .join('');
 
-  $modalContainer.classList.toggle('active', state.isPopup);
+  $modalContainer.classList.toggle('active', state.isPopupOpened);
 };
 
 const setState = newState => {
@@ -26,18 +26,18 @@ const addText = newText => {
   setState({
     ...state,
     textList: [newText, ...state.textList],
-    isPopup: false
+    isPopupOpened: false
   });
 };
 
 $togglePopup.addEventListener('click', () => {
-  setState({ ...state, isPopup: true });
+  setState({ ...state, isPopupOpened: true });
   $modalInput.focus();
 });
 
 $modalContainer.addEventListener('click', e => {
   if (e.target.closest('.close') || !e.target.closest('.modal')) {
-    setState({ ...state, isPopup: false });
+    setState({ ...state, isPopupOpened: false });
     $modalInput.value = '';
   }
 });
