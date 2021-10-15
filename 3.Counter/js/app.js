@@ -7,6 +7,7 @@ const setCounter = (function () {
   const render = () => {
     $counter.textContent = counter;
   };
+
   return num => {
     counter = counter + num < 0 ? 0 : counter + num;
     render();
@@ -14,6 +15,8 @@ const setCounter = (function () {
 })();
 
 $container.addEventListener('click', e => {
-  if (!e.target.matches('.container > button')) return;
-  e.target.classList.contains('increase') ? setCounter(1) : setCounter(-1);
+  const $button = e.target.closest('button');
+  if (!$button) return;
+
+  $button.classList.contains('increase') ? setCounter(1) : setCounter(-1);
 });
