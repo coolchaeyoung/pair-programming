@@ -18,6 +18,7 @@
       *::after,
       *::before {
         box-sizing: border-box;
+        --width: 300px;
       }
       body {
         font-family: 'Open Sans';
@@ -33,27 +34,31 @@
       .hidden {
         display: none;
       }
-
-      /* calendar */
-      .calendar {
-        --width: 300px;
-        width: calc(var(--width));
-        min-width: 300px;
-        background-color: green;
-        box-shadow: 1px 0 10px 0 gray;
-        border-radius: calc(var(--width) / 20);
-        text-align: center;
+      button {
+        border: 0;
+        background-color: white;
       }
 
-      /* calendar navigator */
+      .calendar {
+        box-shadow: 1px 0 10px 0 gray;
+        border-radius: 10px;
+        text-align: center;
+        width: var(--width);
+        /* background-color: gray; */
+      }
       .calendar-nav {
-        padding: calc(var(--width) / 30) calc(var(--width) / 15);
+        border-radius: 10px 10px 0 0;
         display: flex;
+        color: white;
+        background-color: #7dd87d;
         justify-content: space-between;
         align-items: center;
+        padding: 10px 20px;
+      }
+      .calendar-nav > button {
         background-color: #7dd87d;
-        border-radius: calc(var(--width) / 20) calc(var(--width) / 20) 0 0;
-        color: white;
+        padding: 10px;
+        cursor: pointer;
       }
       .prev: {
         order: 0;
@@ -65,39 +70,24 @@
         order: 1;
       }
       .currentMonth {
-        font-size: calc(var(--width) / 15);
+        font-size: 18px;
       }
       .currentYear {
         display: block;
-        font-size: calc(var(--width) / 18);
+        font-size: 14px;
       }
-      .calendar-nav > button {
-        padding: calc(var(--width) / 15);
-        font-size: calc(var(--width) / 18);
-        background-color: #7dd87d;
-        border: none;
-        color: white;
-        cursor: pointer;
-      }
-
-      /* calendar grid */
       .calendar-grid {
-        padding: calc(var(--width) / 30);
+        border-radius: 0 0 10px 10px;
+        background-color: white;
         display: grid;
         grid-template-columns: repeat(7, 1fr);
         grid-template-rows: auto;
-        gap: calc(var(--width) / 30);
-        background-color: white;
-        border-radius: 0 0 calc(var(--width) / 30) calc(var(--width) / 30);
+        gap: 10px;
+        padding: 10px;
         color: gray;
       }
       .calendar-grid > button {
-        width: calc((var(--width) - 2 * (var(--width) / 6)) / 7);
-        height: calc((var(--width) - 2 * (var(--width) / 6)) / 7);
-        background-color: white;
-        border: none;
-        text-align: center;
-        font-size: calc(var(--width) / 24);
+        padding: 10px 0;
         color: gray;
       }
       .calendar-grid > button:hover {
@@ -138,8 +128,8 @@
     <div class="calendar hidden">
       <!-- 뷰를 구현하세요 -->
       <div class="calendar-nav">
-        <button class="prev"><i class="bx bxs-left-arrow"></i></button>
-        <button class="next"><i class="bx bxs-right-arrow"></i></button>
+        <button class="prev"><i class="bx bx-left-arrow"></i></button>
+        <button class="next"><i class="bx bx-right-arrow"></i></button>
         <div class="currentDate">
           <span class="currentMonth">January</span>
           <span class="currentYear">2021</span>

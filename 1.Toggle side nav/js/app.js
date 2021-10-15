@@ -1,3 +1,4 @@
+// FIXME: isToggle -> isExpanded
 let state = { isToggle: false, isInit: false };
 
 const $nav = document.querySelector('nav');
