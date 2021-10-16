@@ -43,18 +43,6 @@ const getDay = (year, month, day) => new Date(year, month, day).getDay();
 const isEqualDate = (date1, date2) =>
   date1.toDateString() === date2.toDateString();
 
-// const createDateOfMonth = (year, month) => {
-//   const createdYear = month === 12 ? year + 1 : month === -1 ? year - 1 : year;
-//   const createdMonth = month === 12 ? 0 : month === -1 ? 11 : month;
-
-//   return Array.from(
-//     {
-//       length: getLastDateOfMonth(year, month)
-//     },
-//     (_, i) => ({ year: createdYear, month: createdMonth, day: i + 1 })
-//   );
-// };
-
 const createDateOfMonth = (year, month, ...sliceRange) => {
   const createdYear = month === 12 ? year + 1 : month === -1 ? year - 1 : year;
   const createdMonth = month === 12 ? 0 : month === -1 ? 11 : month;
@@ -91,33 +79,14 @@ const render = () => {
 
   const currentFirstDayOfMonth = getFirstDayOfMonth(state.year, state.month);
   const currentLastDayOfMonth = getLastDayOfMonth(state.year, state.month);
-  const renderWeek = DAYS.map(day => `<div>${day}</div>`).join('');
 
-  // const prevDays =
-  //   currentFirstDayOfMonth === 0
-  //     ? ''
-  //     : createDateOfMonth(state.year, state.month - 1)
-  //         .slice(-currentFirstDayOfMonth)
-  //         .map(createCalendarDate)
-  //         .join('');
-
-  // const currentDays = createDateOfMonth(state.year, state.month)
-  //   .map(createCalendarDate)
-  //   .join('');
-
-  // const nextDays = createDateOfMonth(state.year, state.month + 1)
-  //   .slice(0, 6 - currentLastDayOfMonth)
-  //   .map(createCalendarDate)
-  //   .join('');
-
-  const prevDays =
+  const calendarColumnHeader = DAYS.map(day => `<div>${day}</div>`).join('');
+  const prevMonthDays =
     currentFirstDayOfMonth === 0
       ? []
       : createDateOfMonth(state.year, state.month - 1, -currentFirstDayOfMonth);
-
-  const currentDays = createDateOfMonth(state.year, state.month, 0);
-
-  const nextDays = createDateOfMonth(
+  const currentMonthDays = createDateOfMonth(state.year, state.month, 0);
+  const nextMonthDays = createDateOfMonth(
     state.year,
     state.month + 1,
     0,
@@ -125,10 +94,10 @@ const render = () => {
   );
 
   $calendarGrid.innerHTML =
-    renderWeek +
-    [...prevDays, ...currentDays, ...nextDays].map(createCalendarDate).join('');
-
-  $calendarGrid.innerHTML = renderWeek + prevDays + currentDays + nextDays;
+    calendarColumnHeader +
+    [...prevMonthDays, ...currentMonthDays, ...nextMonthDays]
+      .map(createCalendarDate)
+      .join('');
 
   $calendar.classList.toggle('hidden', !state.isShow);
 };
