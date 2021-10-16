@@ -3,9 +3,7 @@ let isDarkTheme = false;
 const $body = document.querySelector('body');
 const $toggleButton = document.querySelector('.toggle-button');
 
-const render = () => {
-  $body.classList.toggle('dark', isDarkTheme);
-};
+const render = () => $body.classList.toggle('dark', isDarkTheme);
 
 const setTheme = newTheme => {
   isDarkTheme = newTheme;

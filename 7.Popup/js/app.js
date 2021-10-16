@@ -22,13 +22,12 @@ const setState = newState => {
   render();
 };
 
-const addText = newText => {
+const addText = newText =>
   setState({
     ...state,
     textList: [newText, ...state.textList],
     isPopupOpened: false
   });
-};
 
 $togglePopup.addEventListener('click', () => {
   setState({ ...state, isPopupOpened: true });

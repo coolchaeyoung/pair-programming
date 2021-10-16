@@ -19,7 +19,6 @@ const timeToString = time => {
 
 const render = () => {
   $display.textContent = timeToString(state.displayTime);
-
   $startOrStop.textContent = state.isRunning ? 'Stop' : 'Start';
 
   $resetOrLap.toggleAttribute('disabled', !state.displayTime);
@@ -41,9 +40,7 @@ const setState = newState => {
   render();
 };
 
-const stop = () => {
-  setState({ ...state, isRunning: false });
-};
+const stop = () => setState({ ...state, isRunning: false });
 
 const start = () => {
   setState({ ...state, isRunning: true });
@@ -57,13 +54,9 @@ const start = () => {
   }, 10);
 };
 
-const addLap = newLap => {
-  setState({ ...state, laps: [...state.laps, newLap] });
-};
+const addLap = newLap => setState({ ...state, laps: [...state.laps, newLap] });
 
-const reset = () => {
-  setState({ displayTime: 0, laps: [], isRunning: false });
-};
+const reset = () => setState({ displayTime: 0, laps: [], isRunning: false });
 
 $startOrStop.addEventListener('click', () => {
   state.isRunning ? stop() : start();

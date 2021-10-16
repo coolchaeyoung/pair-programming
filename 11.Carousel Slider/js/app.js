@@ -33,9 +33,8 @@ const carousel = ($container, images) => {
   $container.appendChild($fragment);
 
   // state function
-  const render = () => {
+  const render = () =>
     $carouselSlides.style.setProperty('--currentSlide', currentSlide);
-  };
 
   const setCurrentSlide = newCurrentSlide => {
     currentSlide = newCurrentSlide;

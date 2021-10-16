@@ -12,7 +12,6 @@ const renderInit = contents => {
       .join('')}
       <span class="glider"></span>
     </nav>`;
-
   const tabContents = contents
     .map(
       ({ content }, i) =>
@@ -24,7 +23,6 @@ const renderInit = contents => {
 
   $tabs.style.setProperty('--tabs-length', contents.length);
   $tabs.innerHTML = navTabs + tabContents;
-
   $spinner.style.display = 'none';
 };
 
