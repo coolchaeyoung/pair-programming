@@ -1,4 +1,4 @@
-const MONTH = [
+const MONTHS = [
   'January',
   'February',
   'March',
@@ -13,7 +13,7 @@ const MONTH = [
   'December'
 ];
 
-const DAY = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 let state = {
   dateYear: 0,
@@ -22,6 +22,7 @@ let state = {
   isShow: false
 };
 
+const $body = document.querySelector('body');
 const $datePicker = document.querySelector('.datePicker');
 const $calendar = document.querySelector('.calendar');
 const $calendarNav = document.querySelector('.calendar-nav');
@@ -29,77 +30,103 @@ const $currentMonth = document.querySelector('.currentMonth');
 const $currentYear = document.querySelector('.currentYear');
 const $calendarGrid = document.querySelector('.calendar-grid');
 
-// 말일
 const getLastDateOfMonth = (year, month) =>
   new Date(year, month + 1, 0).getDate();
 
-// 1일의 요일
 const getFirstDayOfMonth = (year, month) => new Date(year, month).getDay();
 
-// 말일 요일
 const getLastDayOfMonth = (year, month) =>
   new Date(year, month + 1, 0).getDay();
 
 const getDay = (year, month, day) => new Date(year, month, day).getDay();
 
-const createAllOfMonth = (year, month) => {
-  const resultYear = month === 12 ? year + 1 : month === -1 ? year - 1 : year;
-  const resultMonth = month === 12 ? 0 : month === -1 ? 11 : month;
+const isEqualDate = (date1, date2) =>
+  date1.toDateString() === date2.toDateString();
+
+// const createDateOfMonth = (year, month) => {
+//   const createdYear = month === 12 ? year + 1 : month === -1 ? year - 1 : year;
+//   const createdMonth = month === 12 ? 0 : month === -1 ? 11 : month;
+
+//   return Array.from(
+//     {
+//       length: getLastDateOfMonth(year, month)
+//     },
+//     (_, i) => ({ year: createdYear, month: createdMonth, day: i + 1 })
+//   );
+// };
+
+const createDateOfMonth = (year, month, ...sliceRange) => {
+  const createdYear = month === 12 ? year + 1 : month === -1 ? year - 1 : year;
+  const createdMonth = month === 12 ? 0 : month === -1 ? 11 : month;
 
   return Array.from(
     {
       length: getLastDateOfMonth(year, month)
     },
-    (_, i) => ({ year: resultYear, month: resultMonth, day: i + 1 })
-  );
+    (_, i) => ({ year: createdYear, month: createdMonth, day: i + 1 })
+  ).slice(...sliceRange);
+};
+
+const createCalendarDate = ({ year, month, day }) => {
+  const sunday =
+    getDay(year, month, day) === 0 && month === state.month ? 'red ' : '';
+  const weekdays = month === state.month ? 'black ' : '';
+  const selectDay = isEqualDate(
+    new Date(year, month, day),
+    new Date(state.year, state.month, state.day)
+  )
+    ? 'select '
+    : '';
+  const today = isEqualDate(new Date(year, month, day), new Date())
+    ? 'today '
+    : '';
+  const classString = (sunday + weekdays + selectDay + today).trim();
+
+  return `<button class="${classString}" data-year="${year}" data-month="${month}">${day}</button>`;
 };
 
 const render = () => {
-  $currentMonth.textContent = MONTH[state.month];
+  $currentMonth.textContent = MONTHS[state.month];
   $currentYear.textContent = state.year;
-  const renderWeek = DAY.map(day => `<div>${day}</div>`).join('');
 
   const currentFirstDayOfMonth = getFirstDayOfMonth(state.year, state.month);
   const currentLastDayOfMonth = getLastDayOfMonth(state.year, state.month);
+  const renderWeek = DAYS.map(day => `<div>${day}</div>`).join('');
 
-  const createRenderButton = ({ year, month, day }) => {
-    let string =
-      getDay(year, month, day) === 0 && month === state.month ? 'red ' : '';
-    string += month === state.month ? 'black ' : '';
-    string +=
-      year === state.year && month === state.month && day === state.day
-        ? 'select '
-        : '';
-    string +=
-      new Date(year, month, day).toDateString() === new Date().toDateString()
-        ? 'today '
-        : '';
+  // const prevDays =
+  //   currentFirstDayOfMonth === 0
+  //     ? ''
+  //     : createDateOfMonth(state.year, state.month - 1)
+  //         .slice(-currentFirstDayOfMonth)
+  //         .map(createCalendarDate)
+  //         .join('');
 
-    return `<button class="${string.trim()}" data-year="${year}" data-month="${month}">${day}</button>`;
-  };
+  // const currentDays = createDateOfMonth(state.year, state.month)
+  //   .map(createCalendarDate)
+  //   .join('');
+
+  // const nextDays = createDateOfMonth(state.year, state.month + 1)
+  //   .slice(0, 6 - currentLastDayOfMonth)
+  //   .map(createCalendarDate)
+  //   .join('');
 
   const prevDays =
     currentFirstDayOfMonth === 0
-      ? ''
-      : createAllOfMonth(state.year, state.month - 1)
-          .slice(-currentFirstDayOfMonth)
-          .map(createRenderButton)
-          .join('');
+      ? []
+      : createDateOfMonth(state.year, state.month - 1, -currentFirstDayOfMonth);
 
-  const currentDays = createAllOfMonth(state.year, state.month)
-    .map(createRenderButton)
-    .join('');
+  const currentDays = createDateOfMonth(state.year, state.month, 0);
 
-  const nextDays = createAllOfMonth(state.year, state.month + 1)
-    .slice(0, 6 - currentLastDayOfMonth)
-    .map(createRenderButton)
-    .join('');
+  const nextDays = createDateOfMonth(
+    state.year,
+    state.month + 1,
+    0,
+    6 - currentLastDayOfMonth
+  );
 
-  // const pickDate = `${state.year}-${(state.month + 1 + '').padStart(2, '0')}-${(
-  //   state.day + ''
-  // ).padStart(2, '0')}`;
-
-  // $datePicker.value = pickDate;
+  $calendarGrid.innerHTML =
+    renderWeek +
+    [...prevDays, ...currentDays, ...nextDays].map(createCalendarDate).join('');
 
   $calendarGrid.innerHTML = renderWeek + prevDays + currentDays + nextDays;
 
@@ -110,6 +137,23 @@ const setState = newState => {
   state = newState;
   render();
 };
+
+const moveMonth = movedMonth => {
+  const year =
+    movedMonth < 0
+      ? state.year - 1
+      : movedMonth > 11
+      ? state.year + 1
+      : state.year;
+  const month = movedMonth < 0 ? 11 : movedMonth > 11 ? 0 : movedMonth;
+
+  setState({ ...state, year, month });
+};
+
+$body.addEventListener('click', e => {
+  if (!e.target.matches('.datePicker') && !e.target.closest('.calendar'))
+    setState({ ...state, isShow: false });
+});
 
 $datePicker.addEventListener('click', e => {
   const date = e.target.value === '' ? new Date() : new Date(e.target.value);
@@ -125,28 +169,17 @@ $calendarNav.addEventListener('click', e => {
   const $button = e.target.closest('button');
   if (!$button) return;
 
-  // FIXME: 가독성
-  if ($button.classList.contains('prev')) {
-    state.month - 1 < 0
-      ? setState({ ...state, year: state.year - 1, month: 11 })
-      : setState({ ...state, month: state.month - 1 });
-  }
-
-  if ($button.classList.contains('next')) {
-    state.month + 1 > 11
-      ? setState({ ...state, year: state.year + 1, month: 0 })
-      : setState({ ...state, month: state.month + 1 });
-  }
+  $button.classList.contains('prev')
+    ? moveMonth(state.month - 1)
+    : moveMonth(state.month + 1);
 });
 
 $calendarGrid.addEventListener('click', e => {
   if (!e.target.matches('button')) return;
 
-  const { year, month: strMonth } = e.target.dataset;
-  const month = +strMonth + 1 + '';
+  const { year, month } = e.target.dataset;
   const day = e.target.textContent;
-  const pickDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-
-  $datePicker.value = pickDate;
+  const format = n => (n < 10 ? '0' + n : n + '');
+  $datePicker.value = `${year}-${format(+month + 1)}-${format(day)}`;
   setState({ year: +year, month: +month, day: +day, isShow: false });
 });
