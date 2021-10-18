@@ -16,9 +16,9 @@ const MONTHS = [
 const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 let state = {
-  dateYear: 0,
-  dateMonth: 0, // 0 ~ 11
-  dateDay: 0, // 1 ~ 31
+  year: 0,
+  month: 0, // 0 ~ 11
+  day: 0, // 1 ~ 31
   isShow: false
 };
 
